@@ -1,0 +1,1 @@
+recursive-include aimage_supervision/staticfiles/fonts *.ttf

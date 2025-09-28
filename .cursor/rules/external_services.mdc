@@ -1,0 +1,26 @@
+---
+description: This document outlines the external services that the `aimage-supervision-backend` application interacts with, primarily through client modules located in `@aimage_supervision/clients/` and dedicated service modules.
+globs: 
+alwaysApply: false
+---
+# External Service Integrations
+
+This document outlines the external services that the `aimage-supervision-backend` application interacts with, primarily through client modules located in `[aimage_supervision/clients/](mdc:aimage_supervision/clients)` and dedicated service modules.
+
+## Client Modules (`aimage_supervision/clients/`)
+
+This directory contains dedicated client modules for various external services:
+
+*   `[aimage_supervision/clients/aws_s3.py](mdc:aimage_supervision/clients/aws_s3.py)`: Client for interacting with Amazon S3 for object storage (e.g., storing and retrieving files, images).
+*   `[aimage_supervision/clients/google.py](mdc:aimage_supervision/clients/google.py)`: A general client for Google services. This might be used for various Google APIs. Specific Google service integrations might also have their own modules (see `google_drive.py` below).
+*   `[aimage_supervision/clients/translation.py](mdc:aimage_supervision/clients/translation.py)`: Client for an external translation service (e.g., Google Translate, DeepL) to translate text content.
+*   `[aimage_supervision/clients/vecs.py](mdc:aimage_supervision/clients/vecs.py)`: Client for a vector database or service (e.g., pgvector). Used for similarity searches and embeddings.
+*   `[aimage_supervision/clients/keypoints.py](mdc:aimage_supervision/clients/keypoints.py)`: Client for an AI/ML service that likely deals with keypoint detection in images or videos.
+*   `[aimage_supervision/clients/llm.py](mdc:aimage_supervision/clients/llm.py)`: Client for interacting with Large Language Models (LLMs) like OpenAI GPT, Anthropic Claude, etc.
+*   `[aimage_supervision/clients/multimodal_embedding.py](mdc:aimage_supervision/clients/multimodal_embedding.py)`: Client for an AI/ML service that generates multimodal embeddings (e.g., for images and text).
+
+## Service-Specific Integrations
+
+*   `[aimage_supervision/services/google_drive.py](mdc:aimage_supervision/services/google_drive.py)`: A dedicated service module for interacting with Google Drive, likely built upon a more generic Google client.
+
+Configuration for these clients (API keys, endpoints, etc.) is typically managed through environment variables and accessed via `[aimage_supervision/settings.py](mdc:aimage_supervision/settings.py)`.

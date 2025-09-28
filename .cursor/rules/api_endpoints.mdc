@@ -1,0 +1,32 @@
+---
+description: This document provides an overview of where API endpoints are defined in the `aimage-supervision-backend` project.
+globs: 
+alwaysApply: false
+---
+# API Endpoints
+
+This document provides an overview of where API endpoints are defined in the `aimage-supervision-backend` project.
+
+## Router Definitions
+
+API routes are primarily organized and included via FastAPI routers.
+
+*   `[aimage_supervision/routers/](mdc:aimage_supervision/routers)`: This directory contains the main router configurations.
+    *   `[aimage_supervision/routers/v1.py](mdc:aimage_supervision/routers/v1.py)`: Aggregates and includes various endpoint routers for the v1 API. It's the main entry point for discovering all v1 routes.
+
+## Endpoint Implementations
+
+The actual logic for individual API endpoints is typically found in the `aimage_supervision/endpoints/` directory. Each file in this directory usually corresponds to a specific resource or a group of related endpoints.
+
+Key endpoint modules include:
+
+*   `[aimage_supervision/endpoints/ai_review.py](mdc:aimage_supervision/endpoints/ai_review.py)`: Endpoints related to AI review functionalities.
+*   `[aimage_supervision/endpoints/tasks.py](mdc:aimage_supervision/endpoints/tasks.py)`: Endpoints for managing tasks.
+*   `[aimage_supervision/endpoints/users.py](mdc:aimage_supervision/endpoints/users.py)`: Endpoints for user management.
+*   `[aimage_supervision/endpoints/admin_dashboard.py](mdc:aimage_supervision/endpoints/admin_dashboard.py)`: Endpoints for the admin dashboard.
+*   `[aimage_supervision/endpoints/assets.py](mdc:aimage_supervision/endpoints/assets.py)`: Endpoints for managing assets.
+*   `[aimage_supervision/endpoints/auth.py](mdc:aimage_supervision/endpoints/auth.py)`: Authentication related endpoints (e.g., login, token refresh).
+*   `[aimage_supervision/endpoints/health.py](mdc:aimage_supervision/endpoints/health.py)`: Health check endpoint.
+*   `[aimage_supervision/endpoints/projects.py](mdc:aimage_supervision/endpoints/projects.py)`: Endpoints for project management.
+
+To understand the specific routes (HTTP methods, paths, request/response models), refer to the FastAPI router definitions within these files and how they are included in `[aimage_supervision/routers/v1.py](mdc:aimage_supervision/routers/v1.py)` and ultimately mounted in the main application at `[main.py](mdc:main.py)` or `[aimage_supervision/app.py](mdc:aimage_supervision/app.py)`.

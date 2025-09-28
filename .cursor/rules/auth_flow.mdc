@@ -1,0 +1,30 @@
+---
+description: This document outlines the key components involved in the authentication and authorization flow of the application.
+globs: 
+alwaysApply: false
+---
+# Authentication and Authorization Flow
+
+This document outlines the key components involved in the authentication and authorization flow of the application.
+
+## Core Authentication Logic
+
+*   `[aimage_supervision/endpoints/auth.py](mdc:aimage_supervision/endpoints/auth.py)`: This module contains the API endpoints responsible for authentication, such as user login (e.g., issuing JWT tokens), token refresh, and potentially user registration or password recovery endpoints.
+*   `[aimage_supervision/middlewares/auth.py](mdc:aimage_supervision/middlewares/auth.py)`: This middleware is crucial for protecting endpoints. It likely inspects incoming requests for authentication tokens (e.g., JWT in headers), validates them, and populates user information in the request state if authentication is successful. It may also handle authorization by checking user roles or permissions.
+
+## Supporting Modules
+
+*   `[aimage_supervision/schemas.py](mdc:aimage_supervision/schemas.py)`: Likely contains Pydantic schemas for authentication-related request and response payloads, such as `Token`, `UserLogin`, `UserCreate`, etc.
+*   `[aimage_supervision/models.py](mdc:aimage_supervision/models.py)`: Defines the `User` model and any related models (e.g., roles, permissions) that are used by the authentication system.
+*   `[aimage_supervision/services/](mdc:aimage_supervision/services)`: May contain a user service or authentication service that encapsulates logic for user lookup, password hashing and verification, and token generation/validation, often used by the `auth.py` endpoint and middleware.
+*   `[aimage_supervision/settings.py](mdc:aimage_supervision/settings.py)`: Contains settings related to authentication, such as JWT secret keys, token expiry times, and algorithm.
+
+## General Flow
+
+1.  **Login:** A user submits credentials (e.g., email/password) to an endpoint in `[aimage_supervision/endpoints/auth.py](mdc:aimage_supervision/endpoints/auth.py)`.
+2.  **Token Generation:** If credentials are valid, the endpoint generates an access token (and possibly a refresh token) and returns it to the client.
+3.  **Authenticated Requests:** For subsequent requests to protected routes, the client includes the access token in the `Authorization` header.
+4.  **Token Validation:** The `[aimage_supervision/middlewares/auth.py](mdc:aimage_supervision/middlewares/auth.py)` intercepts these requests, validates the token, and extracts user information.
+5.  **Authorization:** The middleware or endpoint logic may then perform authorization checks based on the authenticated user's roles or permissions before allowing access to the resource.
+
+Consult these files to understand the specific implementation details of the authentication and authorization mechanisms.

@@ -1,0 +1,44 @@
+---
+description: This document provides an overview of the `aimage-supervision-backend` project structure.
+globs: 
+alwaysApply: false
+---
+# Project Overview
+
+This document provides an overview of the `aimage-supervision-backend` project structure.
+
+## Key Files & Directories
+
+*   **Entry Points & Configuration:**
+    *   `[main.py](mdc:main.py)`: The main application entry point.
+    *   `[dev.py](mdc:dev.py)`: Likely used for development-specific startup or utilities.
+    *   `[pyproject.toml](mdc:pyproject.toml)`: Defines project metadata and dependencies (Poetry).
+    *   `[requirements.txt](mdc:requirements.txt)`: Lists project dependencies.
+    *   `[.env](mdc:.env)` & `[.env.prod](mdc:.env.prod)`: Environment variable configuration files for different environments.
+    *   `[Dockerfile](mdc:Dockerfile)`: Instructions for building the Docker container.
+    *   `[build.sh](mdc:build.sh)` & `[run.sh](mdc:run.sh)`: Shell scripts for building and running the application.
+
+*   **Main Application Logic (`aimage_supervision/`)**
+    *   `[aimage_supervision/](mdc:aimage_supervision)`: The core application package.
+    *   `[aimage_supervision/routers/](mdc:aimage_supervision/routers)`: Contains API route definitions.
+    *   `[aimage_supervision/services/](mdc:aimage_supervision/services)`: Houses the business logic and services.
+    *   `[aimage_supervision/endpoints/](mdc:aimage_supervision/endpoints)`: Likely contains API endpoint handlers.
+    *   `[aimage_supervision/clients/](mdc:aimage_supervision/clients)`: Modules for interacting with external services or APIs.
+    *   `[aimage_supervision/middlewares/](mdc:aimage_supervision/middlewares)`: Custom middleware for request/response processing.
+    *   `[aimage_supervision/utils/](mdc:aimage_supervision/utils)`: Utility functions and helper modules.
+    *   `[aimage_supervision/staticfiles/](mdc:aimage_supervision/staticfiles)`: Static assets like fonts.
+
+*   **Database Migrations:**
+    *   `[migrations/](mdc:migrations)`: Contains database migration scripts, likely managed by a tool like Alembic.
+
+*   **CI/CD & Linting:**
+    *   `[.github/](mdc:.github)`: GitHub Actions workflows for CI/CD.
+    *   `[.pre-commit-config.yaml](mdc:.pre-commit-config.yaml)`: Configuration for pre-commit hooks.
+
+## Development Workflow
+
+1.  Set up the environment using `[.env](mdc:.env)`.
+2.  Install dependencies from `[pyproject.toml](mdc:pyproject.toml)` (e.g., using `poetry install`) or `[requirements.txt](mdc:requirements.txt)`.
+3.  Run the development server, possibly using `[dev.py](mdc:dev.py)` or a command specified in `[run.sh](mdc:run.sh)`.
+4.  API endpoints are defined in `[aimage_supervision/routers/](mdc:aimage_supervision/routers)` or `[aimage_supervision/endpoints/](mdc:aimage_supervision/endpoints)`.
+5.  Business logic is implemented in `[aimage_supervision/services/](mdc:aimage_supervision/services)`.

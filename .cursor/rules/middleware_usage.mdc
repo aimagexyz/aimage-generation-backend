@@ -1,0 +1,26 @@
+---
+description: This document describes the custom middlewares used in the `aimage-supervision-backend` application and their purposes.
+globs: 
+alwaysApply: false
+---
+# Middleware Usage
+
+This document describes the custom middlewares used in the `aimage-supervision-backend` application and their purposes.
+
+FastAPI middlewares are processed for every request before it hits the specific path operation and after the response is generated.
+
+## Key Middlewares
+
+*   `[aimage_supervision/middlewares/auth.py](mdc:aimage_supervision/middlewares/auth.py)`:
+    *   **Purpose**: Handles authentication and authorization for API requests.
+    *   **Functionality**: This middleware likely inspects incoming requests for an authentication token (e.g., JWT in the `Authorization` header). It validates the token, and if valid, it may extract user information and attach it to the request scope or state, making it available to downstream endpoint handlers. It might also perform basic authorization checks, denying access if the token is invalid, expired, or missing for protected routes.
+
+*   `[aimage_supervision/middlewares/tortoise_paginate.py](mdc:aimage_supervision/middlewares/tortoise_paginate.py)`:
+    *   **Purpose**: Provides pagination functionality for Tortoise ORM querysets.
+    *   **Functionality**: This middleware likely integrates with a pagination library or provides custom logic to handle pagination query parameters (e.g., `page`, `size`) for API endpoints that return lists of resources from the database. It helps in efficiently querying and returning paginated results, which is essential for performance and usability with large datasets.
+
+## Registration
+
+These middlewares are typically added to the FastAPI application instance in `[main.py](mdc:main.py)` or `[aimage_supervision/app.py](mdc:aimage_supervision/app.py)` using `app.add_middleware()`.
+
+Understanding these middlewares is important as they affect how requests are processed globally or for specific sets of routes.
