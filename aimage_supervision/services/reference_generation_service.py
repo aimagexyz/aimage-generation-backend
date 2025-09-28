@@ -102,11 +102,8 @@ class ReferenceGenerationService:
 
         Note: uploaded images are used only for generation and not persisted; we only store generated results.
         """
-        # Build enhanced prompt similar to text-only path
-        enhanced_prompt = ReferenceGenerationService.build_enhanced_prompt(
-            base_prompt,
-            GenerationTags(**{k: v for k, v in tags.items() if v})
-        )
+        # Do not enhance prompt for image-based generation
+        enhanced_prompt = base_prompt
 
         # Read image bytes from UploadFile without saving to disk
         image_bytes_list: list[bytes] = []
