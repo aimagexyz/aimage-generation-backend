@@ -1,3 +1,4 @@
+asyncclick==8.2.2.2
 # Server
 fastapi
 fastapi_pagination>=0.12.28
