@@ -1,0 +1,66 @@
+name: Build and Push to ECR (for App Runner)
+
+on:
+  push:
+    branches: [ "dev" ]
+
+env:
+  AWS_REGION: ap-northeast-1
+  ECR_REPOSITORY: aimage-generation-backend-dev
+  APP_RUNNER_TRACK_TAG: latest
+  # 如未开启 App Runner 自动部署，可设置下方变量并取消注释“手动触发 App Runner 部署”步骤
+  # APP_RUNNER_SERVICE_ARN: arn:aws:apprunner:ap-northeast-1:123456789012:service/your-app-runner-service/xxxxxxxxxxxx
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-push:
+    name: Build and Push Image
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - name: Build, tag, and push image to Amazon ECR
+      id: build-image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        set -euo pipefail
+        TRACK_TAG=${APP_RUNNER_TRACK_TAG:-latest}
+        FULL_SHA=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        FULL_TRACK=$ECR_REGISTRY/$ECR_REPOSITORY:$TRACK_TAG
+
+        echo "Building image..."
+        docker build -t $ECR_REPOSITORY:$IMAGE_TAG .
+
+        echo "Tagging image as $FULL_SHA and $FULL_TRACK..."
+        docker tag $ECR_REPOSITORY:$IMAGE_TAG $FULL_SHA
+        docker tag $ECR_REPOSITORY:$IMAGE_TAG $FULL_TRACK
+
+        echo "Pushing $FULL_SHA..."
+        docker push $FULL_SHA
+        echo "Pushing $FULL_TRACK..."
+        docker push $FULL_TRACK
+
+        echo "image=$FULL_SHA" >> $GITHUB_OUTPUT
+
+    # 可选：若 App Runner 未开启 ECR 自动部署，取消注释以下步骤以手动触发部署
+    # - name: Manually trigger App Runner deployment (optional)
+    #   if: env.APP_RUNNER_SERVICE_ARN != ''
+    #   run: |
+    #     aws apprunner start-deployment --service-arn "$APP_RUNNER_SERVICE_ARN" 
