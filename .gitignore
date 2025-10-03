@@ -17,5 +17,4 @@ credentials/*
 .pylanceignore
 *.json
 /.vscode
-pyproject.toml
 .DS_Store

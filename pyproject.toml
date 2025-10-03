@@ -1,0 +1,33 @@
+[tool.aerich]
+tortoise_orm = "aimage_supervision.settings.TORTOISE_ORM"
+location = "./migrations"
+src_folder = "./."
+
+[tool.pyright]
+venvPath = "."
+venv = "venv"
+exclude = [
+    "migrations",
+    "venv",
+    ".venv", 
+    "env",
+    ".env",
+    "**/__pycache__",
+    "build",
+    "dist",
+    "*.egg-info"
+]
+ignore = [
+    "venv/**",
+    ".venv/**",
+    "env/**",
+    ".env/**"
+]
+
+[tool.mypy]
+# ignore_missing_imports = true
+exclude = "venv"
+
+[[tool.mypy.overrides]]
+module = ["aiocache", "vecs", "gotrue", "reportlab", "reportlab.*"]
+ignore_missing_imports = true
