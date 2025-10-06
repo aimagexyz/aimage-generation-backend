@@ -95,8 +95,9 @@ async def list_references(
         raise HTTPException(404, "Project not found")
     
     references = await GeneratedReference.filter(
-        project_id=project_id
-    ).order_by('-created_at').limit(20)  # Simple limit
+        project_id=project_id,
+        created_by=current_user.id
+    ).order_by('-created_at')
     
     results = []
     for ref in references:
