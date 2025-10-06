@@ -1,0 +1,42 @@
+---
+description: This document outlines the main directory structure of the `aimage-supervision-backend` application.
+globs: 
+alwaysApply: false
+---
+# Project Structure
+
+This document outlines the main directory structure of the `aimage-supervision-backend` application.
+
+## Root Directory
+
+*   `[aimage_supervision/](mdc:aimage_supervision)`: Core application Python package.
+*   `[credentials/](mdc:credentials)`: Likely stores credentials, should be handled securely and not committed if sensitive.
+*   `[migrations/](mdc:migrations)`: Database migration scripts (e.g., for Tortoise ORM / Alembic).
+    *   `[migrations/models/](mdc:migrations/models)`: Contains schema versioning files.
+*   `[.github/](mdc:.github)`: GitHub Actions workflows for CI/CD.
+*   `[staticfiles/](mdc:aimage_supervision/staticfiles)`: Static files served by the application (note: nested under `aimage_supervision`).
+
+## Core Application: `aimage_supervision/`
+
+*   `[main.py](mdc:main.py)`: Main FastAPI application setup and entry point.
+*   `[app.py](mdc:aimage_supervision/app.py)`: Likely contains FastAPI app instantiation and core configurations.
+*   `[settings.py](mdc:aimage_supervision/settings.py)`: Application settings and configuration management (e.g., using Pydantic Settings).
+*   `[models.py](mdc:aimage_supervision/models.py)`: Defines database models (likely Tortoise ORM).
+*   `[schemas.py](mdc:aimage_supervision/schemas.py)`: Pydantic schemas for data validation and serialization.
+*   `[enums.py](mdc:aimage_supervision/enums.py)`: Custom enumeration types.
+*   `[constants.py](mdc:aimage_supervision/constants.py)`: Project-wide constants.
+*   `[routers/](mdc:aimage_supervision/routers)`: Defines API routers. Includes `[routers/v1.py](mdc:aimage_supervision/routers/v1.py)`.
+*   `[endpoints/](mdc:aimage_supervision/endpoints)`: Contains API endpoint logic for different resources (e.g., `[endpoints/ai_review.py](mdc:aimage_supervision/endpoints/ai_review.py)`, `[endpoints/tasks.py](mdc:aimage_supervision/endpoints/tasks.py)`).
+*   `[services/](mdc:aimage_supervision/services)`: Business logic layer (e.g., `[services/task_service.py](mdc:aimage_supervision/services/task_service.py)`, `[services/google_drive.py](mdc:aimage_supervision/services/google_drive.py)`).
+*   `[clients/](mdc:aimage_supervision/clients)`: Clients for interacting with external services (e.g., AWS S3, Google, LLMs).
+*   `[middlewares/](mdc:aimage_supervision/middlewares)`: Custom FastAPI middlewares (e.g., for auth, pagination).
+*   `[utils/](mdc:aimage_supervision/utils)`: Utility functions and helper modules.
+
+## Configuration & Scripts
+
+*   `[.env](mdc:.env)`, `[.env.prod](mdc:.env.prod)`: Environment variable files.
+*   `[pyproject.toml](mdc:pyproject.toml)`: Project metadata and dependencies (Poetry).
+*   `[requirements.txt](mdc:requirements.txt)`: Project dependencies.
+*   `[Dockerfile](mdc:Dockerfile)`: Docker build instructions.
+*   `[build.sh](mdc:build.sh)`, `[run.sh](mdc:run.sh)`: Build and run scripts.
+*   `[.pre-commit-config.yaml](mdc:.pre-commit-config.yaml)`: Pre-commit hook configurations.

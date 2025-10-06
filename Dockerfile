@@ -1,0 +1,46 @@
+# Use an official Python runtime as a parent image
+FROM --platform=linux/x86_64 python:3.11-slim
+
+# Set the working directory in the container
+WORKDIR /root/code
+
+# Install system dependencies including LibreOffice and fonts
+RUN apt-get update && apt-get install -y \
+    curl \
+    wget \
+    libreoffice \
+    libreoffice-writer \
+    fonts-noto-cjk \
+    fonts-liberation \
+    libxinerama1 \
+    libcairo2 \
+    libcups2 \
+    libdbus-glib-1-2 \
+    poppler-utils \
+    libfontconfig1 \
+    libfreetype6 \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements first for better Docker layer caching
+COPY requirements.txt /root/code/
+
+# Install Python dependencies
+RUN pip install --no-cache-dir --upgrade -r requirements.txt
+
+# Copy the rest of the application code into the container
+COPY . /root/code/
+
+# Set environment variables for LibreOffice
+ENV PATH="/usr/bin:${PATH}"
+ENV UNO_PATH="/usr/lib/libreoffice/program"
+ENV DISABLE_ASPOSE_PSD=1
+
+# Test LibreOffice installation
+RUN libreoffice --headless --version
+
+# Expose the port
+EXPOSE 8000
+
+# Run database migrations and start the application
+CMD ["sh", "-c", "aerich upgrade && uvicorn aimage_supervision.app:app --host 0.0.0.0 --port 8000"]

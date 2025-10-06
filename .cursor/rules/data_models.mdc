@@ -1,0 +1,32 @@
+---
+description: This document describes where data models (for database interaction) and schemas (for API validation/serialization) are defined.
+globs: 
+alwaysApply: false
+---
+# Data Models and Schemas
+
+This document describes where data models (for database interaction) and schemas (for API validation/serialization) are defined.
+
+## Database Models (ORM)
+
+The primary ORM models, likely using Tortoise ORM, are defined in:
+
+*   `[aimage_supervision/models.py](mdc:aimage_supervision/models.py)`: This file contains the definitions of database tables as Python classes. It is the central place for understanding the database structure from the application's perspective.
+
+Database migrations, which reflect changes to these models over time, are stored in:
+
+*   `[migrations/models/](mdc:migrations/models)`: Contains individual migration scripts (e.g., `[0_20250331080605_init.py](mdc:migrations/models/0_20250331080605_init.py)`, `[3_20250511214247_update.py](mdc:migrations/models/3_20250511214247_update.py)`). These scripts are typically generated and managed by an aeration tool like Aerich (for Tortoise ORM).
+
+## API Schemas (Pydantic)
+
+Pydantic models are used for data validation, serialization, and documentation in API endpoints. These are primarily defined in:
+
+*   `[aimage_supervision/schemas.py](mdc:aimage_supervision/schemas.py)`: This file contains Pydantic schemas that define the expected structure of request bodies and response payloads for API endpoints.
+
+## Enumerations
+
+Custom enumeration types used within models, schemas, or business logic are defined in:
+
+*   `[aimage_supervision/enums.py](mdc:aimage_supervision/enums.py)`: Contains `Enum` classes that define sets of named constants.
+
+Understanding these files is crucial for working with data persistence and API data contracts in the application.

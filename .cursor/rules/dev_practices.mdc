@@ -1,0 +1,47 @@
+---
+description: This document outlines key development practices, tools, and configurations for the `aimage-supervision-backend` project.
+globs: 
+alwaysApply: false
+---
+# Development Practices
+
+This document outlines key development practices, tools, and configurations for the `aimage-supervision-backend` project.
+
+## Environment Setup
+
+1.  **Clone the repository.**
+2.  **Environment Variables**: Copy `[.env.example](mdc:.env.example)` (if it exists) to `[.env](mdc:.env)` and populate it with necessary local configuration (database URLs, API keys, etc.). Refer to `[aimage_supervision/settings.py](mdc:aimage_supervision/settings.py)` for required variables.
+3.  **Dependencies**: The project uses Poetry for dependency management, as indicated by `[pyproject.toml](mdc:pyproject.toml)`.
+    *   Install dependencies: `poetry install`
+    *   Alternatively, if `[requirements.txt](mdc:requirements.txt)` is actively maintained for non-Poetry environments: `pip install -r requirements.txt`
+4.  **Activate Virtual Environment**: If using Poetry, activate the virtual environment: `poetry shell`.
+
+## Running Locally
+
+*   Use `[run.sh](mdc:run.sh)` or `python [dev.py](mdc:dev.py)` (if `dev.py` is configured for local Uvicorn server with hot-reloading).
+*   Ensure database services and other external dependencies are running locally or accessible.
+
+## Linting and Formatting
+
+*   **Pre-commit Hooks**: The project uses pre-commit hooks configured in `[.pre-commit-config.yaml](mdc:.pre-commit-config.yaml)`. This likely includes tools like Black, Flake8, isort, and MyPy.
+    *   Install hooks: `pre-commit install`
+    *   Run manually: `pre-commit run --all-files`
+*   Adherence to these tools ensures consistent code style and quality.
+
+## Testing
+
+*   (Information about the testing framework (e.g., Pytest) and how to run tests should be added here once test files/setup are identified. Typically, tests would be in a `tests/` directory.)
+*   Look for test execution commands in `[build.sh](mdc:build.sh)` or CI workflows in `[.github/workflows/](mdc:.github/workflows)`.
+
+## Database Migrations
+
+*   The project uses Tortoise ORM with Aerich (or a similar tool) for migrations, managed in the `[migrations/](mdc:migrations)` directory.
+*   When making changes to models in `[aimage_supervision/models.py](mdc:aimage_supervision/models.py)`:
+    1.  Generate a new migration: (e.g., `aerich migrate <name>` or `aerich -c <config> makemigrations -m <app_name>`). Refer to project-specific scripts or documentation.
+    2.  Apply migrations: (e.g., `aerich upgrade` or `python manage.py migrate`).
+
+## API Documentation
+
+*   FastAPI automatically generates OpenAPI documentation (Swagger UI at `/docs`, ReDoc at `/redoc` by default) based on Pydantic schemas (`[aimage_supervision/schemas.py](mdc:aimage_supervision/schemas.py)`) and endpoint definitions.
+
+By following these practices, developers can maintain a consistent and high-quality codebase.

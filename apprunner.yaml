@@ -1,0 +1,33 @@
+version: 1.0
+runtime: python311
+build:
+  commands:
+    build:
+      - pip install --no-cache-dir -r requirements.txt   # 只做纯 Python 依赖
+run:
+  runtime-version: 3.11
+  pre-run:
+    # 1) 下载 LibreOffice
+    - curl -L https://download.documentfoundation.org/libreoffice/stable/24.2.4/rpm/x86_64/LibreOffice_24.2.4_Linux_x86-64_rpm.tar.gz -o /tmp/lo.tgz
+    - tar -xzf /tmp/lo.tgz -C /tmp
+    # 2) 精简包
+    - find /tmp/LibreOffice_24.2.4*/RPMS -type f ! -name '*core*' ! -name '*writer*' ! -name '*ure*' ! -name '*headless*' -delete
+    # 3) 安装 + 依赖 + 字体
+    - dnf -y --nogpgcheck install /tmp/LibreOffice_24.2.4*/RPMS/*.rpm
+    - dnf -y install libxinerama cairo cups-libs dbus-glib google-noto-sans-cjk-ttc
+    - dnf -y clean all && rm -rf /var/cache/dnf /tmp/lo.tgz
+    # 4) 预热
+    - soffice --headless --version
+  command: gunicorn -b 0.0.0.0:8000 main:app
+  network:
+    port: 8000
+  env:
+    - name: PATH
+      value: "/opt/libreoffice/program:${PATH}"
+    - name: UNO_PATH
+      value: "/opt/libreoffice/program"
+instance:
+  cpu: 1 vCPU
+  memory: 4 GB
+autoscaling:
+  max_concurrency: 4

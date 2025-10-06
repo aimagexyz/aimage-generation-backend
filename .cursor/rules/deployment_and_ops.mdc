@@ -1,0 +1,33 @@
+---
+description: This document provides an overview of how the `aimage-supervision-backend` application is built, deployed, and operated.
+globs: 
+alwaysApply: false
+---
+# Deployment and Operations
+
+This document provides an overview of how the `aimage-supervision-backend` application is built, deployed, and operated.
+
+## Containerization
+
+*   `[Dockerfile](mdc:Dockerfile)`: This file contains the instructions to build a Docker image for the application. It defines the base image, dependencies, application code setup, and the command to run the application (likely using `[run.sh](mdc:run.sh)` or directly Uvicorn/Gunicorn).
+
+## Build and Run Scripts
+
+*   `[build.sh](mdc:build.sh)`: A shell script likely used to automate the build process. This might include steps like building the Docker image, running linters/tests, or compiling assets.
+*   `[run.sh](mdc:run.sh)`: A shell script used to run the application. This could be for local development (e.g., starting a Uvicorn server with hot-reloading via `[dev.py](mdc:dev.py)`) or as the entry point for the Docker container in production.
+
+## Continuous Integration and Deployment (CI/CD)
+
+*   `[.github/](mdc:.github)`: This directory hosts GitHub Actions workflow configurations.
+    *   Files within `[.github/workflows/](mdc:.github/workflows)` (e.g., `.yml` or `.yaml` files) define automated processes for CI (e.g., running tests, linting on push/pull requests) and CD (e.g., deploying the application to staging or production environments after merges to specific branches).
+
+## Environment Configuration
+
+*   `[.env](mdc:.env)`: Used for local development environment variables.
+*   `[.env.prod](mdc:.env.prod)`: May contain production-specific environment variables, though in a typical production setup, these are injected securely by the hosting environment or orchestration system rather than being committed to the repository.
+*   Application settings are managed by `[aimage_supervision/settings.py](mdc:aimage_supervision/settings.py)`, which loads these environment variables.
+
+## Monitoring and Logging
+
+*   The application likely uses standard Python logging. Specific configurations for logging in production (e.g., log levels, output formats, shipping to a log aggregator) would be part of the operational setup, potentially configured via environment variables or within the `[aimage_supervision/settings.py](mdc:aimage_supervision/settings.py)` or `[main.py](mdc:main.py)` / `[aimage_supervision/app.py](mdc:aimage_supervision/app.py)`.
+*   A `[aimage_supervision/endpoints/health.py](mdc:aimage_supervision/endpoints/health.py)` endpoint is available for health checks by load balancers or orchestration systems.
