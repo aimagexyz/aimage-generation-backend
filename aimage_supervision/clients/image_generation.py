@@ -29,7 +29,7 @@ async def generate_image_with_gemini(
     negative_prompt: Optional[str] = None,
 ):
 
-    model = 'imagen-4.0-fast-generate-preview-06-06'
+    model = 'imagen-4.0-fast-generate-001'
 
     response = gemini_client.models.generate_images(
         model=model,
