@@ -98,7 +98,7 @@ class ReferenceGenerationService:
         tags: dict,
         images: list[UploadFile],
     ) -> List[GeneratedReferenceResponse]:
-        """Generate images using gemini-2.5-flash-image-preview with reference images.
+        """Generate images using gemini-2.5-flash-image with reference images.
 
         Note: uploaded images are used only for generation and not persisted; we only store generated results.
         """

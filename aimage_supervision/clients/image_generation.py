@@ -51,16 +51,14 @@ async def generate_image_with_gemini_from_images(
     input_images: List[bytes],
     aspect_ratio: str,
 ) -> Optional[bytes]:
-    """Generate image using the gemini-2.5-flash-image-preview model with reference images.
+    """Generate image using the gemini-2.5-flash-image model with reference images.
 
     Returns a list of raw image bytes.
     """
 
-    model = 'gemini-2.5-flash-image-preview'
+    model = 'gemini-2.5-flash-image'
 
     contents: list = []
-    if aspect_ratio:
-        prompt += f"The image should be in a {aspect_ratio} format."
     # Add text prompt first
     if prompt:
         contents.append(prompt)
@@ -71,6 +69,12 @@ async def generate_image_with_gemini_from_images(
     response = gemini_client.models.generate_content(
         model=model,
         contents=contents,
+        config=types.GenerateContentConfig(
+            response_modalities=['Image'],
+            image_config=types.ImageConfig(
+                aspect_ratio=aspect_ratio,
+            ) if aspect_ratio else None,
+        )
     )
 
     for candidate in getattr(response, 'candidates', []) or []:
