@@ -139,8 +139,6 @@ async def get_current_user_id(
 ) -> str:
     '''从 token 获取当前用户 ID，优先从Cookie获取，回退到Authorization header'''
     token = None
-    print(f'bearer_key: {bearer_key}')
-    print(f'access_token: {access_token}')
 
     # 优先从Cookie中获取token
     if access_token:
@@ -164,7 +162,6 @@ async def get_current_user(
     user_id: Annotated[str, Depends(get_current_user_id)],
 ) -> User:
     '''从 token 获取当前用户'''
-    print(f'user_id: {user_id}')
     user = await User.get_or_none(id=user_id)
     if not user:
         raise HTTPException(
