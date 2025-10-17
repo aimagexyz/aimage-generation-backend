@@ -10,8 +10,8 @@ from aimage_supervision.clients.aws_s3 import (get_s3_url_from_path,
                                                upload_file_to_s3)
 from aimage_supervision.middlewares.auth import get_current_user
 from aimage_supervision.middlewares.tortoise_paginate import tortoise_paginate
-from aimage_supervision.models import (Document, Project, ProjectIn,
-                                       ProjectOut, ProjectSimpleOut, User)
+from aimage_supervision.models import (Project, ProjectIn, ProjectOut,
+                                       ProjectSimpleOut, User)
 from aimage_supervision.settings import logger
 
 router = APIRouter(prefix='', tags=['Projects'])
@@ -101,69 +101,3 @@ async def delete_or_quit_project(
         status_code=status.HTTP_400_BAD_REQUEST,
         detail='You cannot quit this project, because your organization is participating in it',
     )
-
-
-@router.post("/projects/{project_id}/documents", status_code=status.HTTP_201_CREATED)
-async def upload_project_documents(
-    user: Annotated[User, Security(get_current_user)],
-    project_id: str,
-    file: UploadFile = File(..., description="document file"),
-):
-    # verify project permission
-    project = await Project.of_user(user).get_or_none(id=project_id)
-    if not project:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Project not found or no access permission",
-        )
-
-    # upload file to s3
-    cloud_file_path = f"projects/{project_id}/documents/{file.filename}"
-
-    # check if file already exists
-
-    await upload_file_to_s3(file.file, cloud_file_path=cloud_file_path)
-
-    # check if file already exists in database
-    document = await Document.get_or_none(file_path=cloud_file_path)
-    if document:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="File already exists",
-        )
-    # save file metadata to database.
-    document = await Document.create(
-        project=project,
-        file_path=cloud_file_path,
-        file_name=file.filename,
-        file_size=file.size,
-        file_type=file.content_type,
-    )
-
-    logger.info(f"Uploaded {file.filename} documents to project {project_id}")
-
-    return status.HTTP_201_CREATED
-
-
-@router.get("/projects/{project_id}/documents/{document_id}/url")
-async def get_document_url(
-    user: Annotated[User, Security(get_current_user)],
-    project_id: str,
-    document_id: str,
-) -> dict[str, str]:
-    project = await Project.of_user(user).get_or_none(id=project_id)
-    if not project:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Project not found",
-        )
-
-    document = await Document.get_or_none(id=document_id)
-    if not document:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Document not found",
-        )
-    await document.fetch_s3_url()
-
-    return {"file_url": document.file_url()}
