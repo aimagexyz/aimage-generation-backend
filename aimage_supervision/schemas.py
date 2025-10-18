@@ -830,7 +830,7 @@ class GenerationTags(BaseModel):
 
 
 class GenerateRequest(BaseModel):
-    base_prompt: str = Field(min_length=1, max_length=500)
+    base_prompt: str = Field(min_length=1)
     tags: GenerationTags
     count: int = Field(default=1, ge=1, le=4)
     # Add missing parameters for better user control
@@ -840,7 +840,7 @@ class GenerateRequest(BaseModel):
         pattern="^(1:1|16:9|9:16|4:3|3:4)$"
     )
     negative_prompt: Optional[str] = Field(
-        default=None, max_length=500, description="Things to avoid in generation")
+        default=None, description="Things to avoid in generation")
 
 
 class GeneratedReferenceResponse(BaseModel):
