@@ -37,14 +37,20 @@ BASE_DIR = Path(__file__).resolve().parent
 
 # TortoiseORM settings
 DATABASE_URL = ENV('DATABASE_URL', '')
+AUTH_DATABASE_URL = ENV('AUTH_DATABASE_URL', '')
 TORTOISE_ORM = {
     'connections': {
         'default': DATABASE_URL,
+        'auth': AUTH_DATABASE_URL,
     },
     'apps': {
         'models': {
             'models': ['aimage_supervision.models', 'aerich.models'],
             'default_connection': 'default',
+        },
+        'auth': {
+            'models': ['aimage_supervision.models_auth', 'aerich.models'],
+            'default_connection': 'auth',
         },
     },
 }
@@ -67,7 +73,7 @@ boto3_session = aioboto3.Session(
 )
 
 # Vecs
-vecs_client = create_vecs_client(DATABASE_URL)
+# vecs_client = create_vecs_client(DATABASE_URL)
 
 
 # JWT Settings

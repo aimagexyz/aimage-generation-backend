@@ -5,7 +5,7 @@ from fastapi import APIRouter, HTTPException, Security, status
 
 from ..middlewares.auth import (get_current_admin_user, get_current_user,
                                 get_current_user_id)
-from ..models import User, UserIn, UserOut
+from ..models_auth import User, UserIn, UserOut
 
 router = APIRouter(prefix='/users', tags=['Users'])
 

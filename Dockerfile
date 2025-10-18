@@ -43,4 +43,4 @@ RUN libreoffice --headless --version
 EXPOSE 8000
 
 # Run database migrations and start the application
-CMD ["sh", "-c", "aerich upgrade && uvicorn aimage_supervision.app:app --host 0.0.0.0 --port 8000"]
+CMD ["sh", "-c", "aerich --app models upgrade && uvicorn aimage_supervision.app:app --host 0.0.0.0 --port 8000"]

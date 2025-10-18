@@ -8,7 +8,8 @@ from fastapi import UploadFile
 from aimage_supervision.clients.aws_s3 import upload_file_to_s3
 from aimage_supervision.clients.image_generation import (
     generate_image_with_gemini, generate_image_with_gemini_from_images)
-from aimage_supervision.models import GeneratedReference, User
+from aimage_supervision.models import GeneratedReference
+from aimage_supervision.models_auth import User
 from aimage_supervision.schemas import (GeneratedReferenceResponse,
                                         GenerateRequest, GenerationTags)
 
@@ -70,7 +71,7 @@ class ReferenceGenerationService:
                 tags=request.tags.model_dump(exclude_none=True),
                 image_path=s3_key,
                 project_id=project_id,
-                created_by=user
+                created_by_user_id=user.id
             )
             
             await reference.fetch_image_url()
@@ -133,7 +134,7 @@ class ReferenceGenerationService:
             tags={k: v for k, v in tags.items() if v},
             image_path=s3_key,
             project_id=project_id,
-            created_by=user,
+            created_by_user_id=user.id,
         )
 
         await reference.fetch_image_url()

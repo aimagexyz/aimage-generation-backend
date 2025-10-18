@@ -5,7 +5,8 @@ from fastapi import (APIRouter, File, Form, HTTPException, Security,
                      UploadFile, status)
 
 from aimage_supervision.middlewares.auth import get_current_user
-from aimage_supervision.models import GeneratedReference, Project, User
+from aimage_supervision.models import GeneratedReference
+from aimage_supervision.models_auth import Project, User
 from aimage_supervision.schemas import (GeneratedReferenceResponse,
                                         GenerateRequest)
 from aimage_supervision.services.reference_generation_service import \
@@ -24,6 +25,7 @@ async def generate_references(
     current_user: User = Security(get_current_user)
 ):
     """Generate character references from text prompt only."""
+    print(f'request: {request}')
     # Simple validation
     project = await Project.of_user(current_user).get_or_none(id=project_id)
     if not project:
@@ -96,7 +98,7 @@ async def list_references(
     
     references = await GeneratedReference.filter(
         project_id=project_id,
-        created_by=current_user.id
+        created_by_user_id=current_user.id
     ).order_by('-created_at')
     
     results = []

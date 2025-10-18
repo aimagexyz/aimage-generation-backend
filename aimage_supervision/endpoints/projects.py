@@ -10,8 +10,8 @@ from aimage_supervision.clients.aws_s3 import (get_s3_url_from_path,
                                                upload_file_to_s3)
 from aimage_supervision.middlewares.auth import get_current_user
 from aimage_supervision.middlewares.tortoise_paginate import tortoise_paginate
-from aimage_supervision.models import (Project, ProjectIn, ProjectOut,
-                                       ProjectSimpleOut, User)
+from aimage_supervision.models_auth import (Project, ProjectIn, ProjectOut,
+                                            ProjectSimpleOut, User)
 from aimage_supervision.settings import logger
 
 router = APIRouter(prefix='', tags=['Projects'])

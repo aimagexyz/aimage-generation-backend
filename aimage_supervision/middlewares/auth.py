@@ -10,7 +10,7 @@ from fastapi import Cookie, Depends, HTTPException, Security, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 from aimage_supervision.enums import UserRole
-from aimage_supervision.models import User
+from aimage_supervision.models_auth import User
 from aimage_supervision.settings import get_google_client_id, get_jwt_secret
 
 oauth2_scheme = HTTPBearer(

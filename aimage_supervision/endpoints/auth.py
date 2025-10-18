@@ -3,7 +3,7 @@ from pydantic import BaseModel
 
 from ..middlewares.auth import (add_google_user_to_database,
                                 generate_jwt_token, verify_google_token)
-from ..models import User
+from ..models_auth import User
 from ..settings import USE_SECURE_COOKIES
 
 router = APIRouter(prefix='/auth', tags=['Authentication'])
